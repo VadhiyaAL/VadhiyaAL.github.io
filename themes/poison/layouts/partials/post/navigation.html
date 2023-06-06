@@ -1,0 +1,38 @@
+<hr>
+<div class="footer">
+    {{ if .Params.series }}
+    {{ $Site := .Site }}
+    {{ $postTitle := .Title }}
+    <p>
+    This is a post in the <b><a href="{{ $Site.BaseURL }}series/{{ .Params.series | urlize }}">{{ .Params.series }}</a></b> series.
+        <br>Other posts in this series:
+        <ul class="series">
+            {{ $seriesUrl := print "series/" (.Params.series | urlize) }}
+            {{ $series := .Site.GetPage $seriesUrl }}
+            {{ range $series.Pages }}
+            <li>
+                {{ .Date | time.Format ":date_long" }} -
+                {{ if ne .Title $postTitle }}
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                {{ else }}
+                    {{ .Title }}
+                {{ end }}
+            </li>
+            {{ end }}
+        </ul>
+    </p>
+    {{ else }}
+	    {{ if .PrevPage }}
+            {{ if eq .PrevPage.Section "posts" }}
+	            <a class="previous-post" href="{{ .PrevPage.Permalink }}?ref=footer"><span style="font-weight:bold;">« Previous</span><br>{{ .PrevPage.Title | truncate 50 "..."}}</a>
+	        {{ end }}
+        {{ end }}
+	    {{ if .NextPage }}
+            {{ if eq .NextPage.Section "posts" }}
+                <div class="next-post">
+                    <a href="{{ .NextPage.Permalink }}?ref=footer"><span style="font-weight:bold;">Next »</span><br>{{ .NextPage.Title | truncate 50 "..." }}</a>
+                </div>
+	        {{ end }}
+        {{ end }}
+    {{ end }}
+</div>
